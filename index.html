@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server Verification | Sign in with Google</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Official Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #313338; color: #dbdee1; }
@@ -22,20 +24,20 @@
                 <svg class="w-8 h-8" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.15 21.32 7.18 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.14 0 9.87 0 12s.43 3.86 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.18 0 3.15 2.68 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
             </div>
             <h1 class="text-2xl font-bold text-white tracking-wide">Server Verification</h1>
-            <p class="text-sm text-[#949ba4] mt-1">Sign in with your Google account to verify your email and access the server.</p>
+            <p class="text-sm text-[#949ba4] mt-1">Authenticate with your Google account to verify your identity and access the server.</p>
         </div>
 
         <div id="login-view" class="space-y-4">
-            <button onclick="redirectToGoogleLogin()" class="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-100 text-black font-semibold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg text-sm">
+            <button onclick="triggerGooglePrompt()" class="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-100 text-black font-semibold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg text-sm">
                 <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.15 21.32 7.18 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.14 0 9.87 0 12s.43 3.86 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.18 0 3.15 2.68 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-                <span>Continue with Google</span>
+                <span>Sign in with Google</span>
             </button>
-            <p class="text-xs text-[#949ba4]">You will be redirected to Google to securely authenticate your email address.</p>
+            <p class="text-xs text-[#949ba4]">Opens the official native Google account prompt window.</p>
         </div>
 
         <div id="loading-view" class="hidden space-y-4 py-6">
             <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#4285f4] mx-auto"></div>
-            <p id="loading-text" class="text-sm text-[#949ba4]">Authenticating your Google profile...</p>
+            <p id="loading-text" class="text-sm text-[#949ba4]">Processing Google credentials...</p>
         </div>
 
         <div id="success-view" class="hidden space-y-4 py-2">
@@ -57,65 +59,76 @@
     </div>
 
     <script>
-        
-        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE'; 
-        const REDIRECT_URI = window.location.origin + window.location.pathname; 
+        const GOOGLE_CLIENT_ID = '804298598310-vl3ks5t108jrq2ma75lknjr86a4uqdav.apps.googleusercontent.com';
         const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1554484885518032996/oi0vE_zz05KiQVruVpesR4kMbwIewuXMfowlpeetupCZAoxl6svtY_tuz2IyQ9JigdfK';
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const authCode = urlParams.get('code');
-
-            if (authCode) {
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('loading-view').classList.remove('hidden');
-                
-                window.history.replaceState({}, document.title, window.location.pathname);
-
-                await handleGoogleCallback(authCode);
+        window.onload = function () {
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleGoogleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
             }
-        });
+        };
 
-        function redirectToGoogleLogin() {
-            if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
-                
-                simulateTestFlow();
-                return;
+        function triggerGooglePrompt() {
+            try {
+                if (typeof google === 'undefined' || !google.accounts) {
+                    showError("Google SDK failed to load. Please check your internet connection.");
+                    return;
+                }
+                google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                        // Fallback to standard Google sign-in popup flow if the one-tap prompt is blocked or dismissed
+                        renderAlternativeFlow();
+                    }
+                });
+            } catch (err) {
+                showError("Could not trigger Google prompt: " + err.message);
             }
-            const scope = encodeURIComponent('email profile openid');
-            const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${scope}&prompt=select_account`;
-            window.location.href = authUrl;
         }
 
-        async function handleGoogleCallback(code) {
-            try {
-                document.getElementById('loading-text').textContent = 'Fetching your Google account details...';
+        function renderAlternativeFlow() {
+            // Renders the Google sign-in button programmatically if prompt is suppressed
+            const container = document.getElementById('login-view');
+            container.innerHTML = `<div id="g_id_signin" class="flex justify-center"></div><p class="text-xs text-[#949ba4] mt-3">Click the Google button above to proceed.</p>`;
+            
+            google.accounts.id.renderButton(
+                document.getElementById('g_id_signin'),
+                { theme: 'outline', size: 'large', width: '100%' }
+            );
+            google.accounts.id.prompt();
+        }
 
-                setTimeout(async () => {
-                    await sendDiscordLog("Google OAuth User", "VerifiedGoogleUser@gmail.com", "Google Account OAuth");
-                    showSuccessView("Google User", "VerifiedGoogleUser@gmail.com", "https://www.gstatic.com/images/branding/product/1x/avatar_square_grey_512dp.png");
-                }, 1500);
+        async function handleGoogleCredentialResponse(response) {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('loading-view').classList.remove('hidden');
+            document.getElementById('loading-text').textContent = 'Decoding Google profile...';
+
+            try {
+                // Decode Google's returned JWT credential token
+                const base64Url = response.credential.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                
+                const googleUser = JSON.parse(jsonPayload);
+
+                const name = googleUser.name;
+                const email = googleUser.email;
+                const picture = googleUser.picture;
+
+                await sendDiscordLog(name, email, "Google Identity Services Prompt");
+                showSuccessView(name, email, picture);
 
             } catch (err) {
                 document.getElementById('loading-view').classList.add('hidden');
                 document.getElementById('login-view').classList.remove('hidden');
-                showError("Google authorization failed: " + err.message);
+                showError("Failed to parse Google account credentials.");
             }
-        }
-
-        function simulateTestFlow() {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('loading-view').classList.remove('hidden');
-            document.getElementById('loading-text').textContent = 'Opening Google account selection prompt...';
-
-            setTimeout(async () => {
-                const mockEmail = "user.verification.test@gmail.com";
-                const mockName = "Google Test User";
-                const mockAvatar = "https://www.gstatic.com/images/branding/product/1x/avatar_square_grey_512dp.png";
-
-                await sendDiscordLog(mockName, mockEmail, "Simulated Google Prompt View");
-                showSuccessView(mockName, mockEmail, mockAvatar);
-            }, 1500);
         }
 
         async function sendDiscordLog(displayName, email, authType) {
@@ -124,7 +137,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        username: "Google Auth Unit",
+                        username: "Google Prompt Security Unit",
                         embeds: [{
                             title: "🔒 Google Account Verified",
                             color: 4285f4,
